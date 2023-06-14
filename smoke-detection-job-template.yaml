@@ -1,0 +1,15 @@
+name: {{ job_name }}
+plugins:
+- name: smoke-detector
+  pluginSpec:
+    image: registry.sagecontinuum.org/iperezx/wildfire-smoke-detection:0.7.0
+    args:
+    - {{ stream }}
+    selector:
+      resource.gpu: "true"
+nodes:
+  {{ vsn }}:
+scienceRules:
+- 'schedule(smoke-detector): cronjob("smoke-detector", {{ interval }})'
+successCriteria:
+- WallClock(1d)
