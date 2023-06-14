@@ -24,6 +24,15 @@ export SES_HOST=https://es.sagecontinuum.org
 export SES_USER_TOKEN=<<VALID TOKEN>>
 ```
 
+This also needs the Waggle scheduler command-line-interface (CLI), `sesctl`, to manage jobs. To download the tool,
+
+```bash
+# the CLI tool depends on the computer's operating system and architecture
+# in this example we download 0.22.6 version tool for Linux amd64 system
+wget -O sesctl https://github.com/waggle-sensor/edge-scheduler/releases/download/0.22.6/sesctl-linux-amd64
+chmod +x sesctl
+```
+
 ### Populate nodes.csv
 
 nodes.csv consists of nodes that the plugin will be run on,
