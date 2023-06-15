@@ -77,14 +77,14 @@ def resubmit_job(job_id, file_path):
 def get_smoke_data_from_sage(df, prob_threshold=0.5) -> bool:
     time_window = "-1h"
     vsns = '|'.join(df["vsn"].to_list())
-    df = query(start=time_window, filter=
+    sage_data = query(start=time_window, filter=
         {
             "name": "env.smoke.tile_probs",
             "vsn": vsns,
         },
     )
     ret = False
-    for vsn, _df in df.groupby("meta.vsn"):
+    for vsn, _df in sage_data.groupby("meta.vsn"):
         detected = False
         for _, r in _df.iterrows():
             v = np.array(json.loads(r.value))
@@ -136,6 +136,8 @@ logging.info(f'reading nodes.csv...')
 df = pd.read_csv("nodes.csv")
 df["job_id"] = -1
 df["job_name"] = "wildfire-" + df["vsn"]
+logging.info(f'nodes found from nodes.csv: {df["vsn"].to_list()}')
+
 is_smoke_detected = get_smoke_data_from_sage(df, prob_threshold=0.7)
 if is_smoke_detected:
     logging.info('smoke detected. setting wildfire timestamp to now')
@@ -148,10 +150,10 @@ for _, r in df.iterrows():
 
 if is_wildfire_active():
     logging.info("wildfire detected. Adjusting smoke detection execution interval to every 5 minutes")
-    df["interval"] = '"5/* * * * *\"'
+    df["interval"] = '"*/5 * * * *"'
 else:
     logging.info("no wildfire detected. Adjusting smoke detection execution interval to every 30 minutes")
-    df["interval"] = '"30/* * * * *"'
+    df["interval"] = '"*/30 * * * *"'
 
 logging.info("updating jobs...")
 update_job(df)
