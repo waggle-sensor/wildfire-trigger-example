@@ -2,7 +2,7 @@ name: {{ job_name }}
 plugins:
 - name: smoke-detector
   pluginSpec:
-    image: registry.sagecontinuum.org/iperezx/wildfire-smoke-detection:0.7.0
+    image: registry.sagecontinuum.org/iperezx/wildfire-smoke-detection:0.5.0
     args:
     - {{ stream }}
     selector:

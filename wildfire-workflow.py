@@ -110,11 +110,15 @@ def is_wildfire_active(since_second=3600) -> bool:
     wildfire_file = "wildfire"
     if os.path.exists(wildfire_file):
         with open(wildfire_file, "r") as file:
-            t = float(file.read().strip())
-            if time.time() - t < since_second:
-                return True
-            else:
+            s = file.read().strip()
+            if s == "":
                 return False
+            else:
+                t = float(s)
+                if time.time() - t < since_second:
+                    return True
+                else:
+                    return False
     else:
         return False
 
